@@ -1,0 +1,60 @@
+experiment:
+  analysis:
+    conditions:
+    - description: Market hours check
+      enabled: true
+      name: market_hours
+    time_intervals:
+    - 1
+    - 24
+  data_sources:
+    market_data:
+      data_feed: iex
+      provider: alpaca
+      symbols:
+      - name: Test Corp
+        symbol: TEST
+    social_media:
+      accounts:
+      - testuser
+      actor_id: test123
+      date_range:
+        end: now
+        start: 30_days_ago
+      keywords:
+      - test
+      - keyword
+      max_posts: 10
+      platform: twitter
+  description: Testing the system
+  hypothesis: System works correctly
+  name: Test Experiment
+  output:
+    data_exports:
+    - filename: test_data
+      type: csv
+    reports:
+    - filename: test_report
+      include_sections:
+      - sentiment_distribution
+      type: markdown
+    visualizations: []
+  sentiment_analysis:
+    categories:
+    - description: Positive sentiment
+      name: POSITIVE
+    - description: Negative sentiment
+      name: NEGATIVE
+    - description: Neutral sentiment
+      name: NEUTRAL
+    llm_provider: openai
+    model: gpt-3.5-turbo
+    temperature: 0.0
+metadata:
+  created_date: '2025-07-31'
+  description: Test template
+  template_version: '1.0'
+validation:
+  min_confidence_threshold: 0.5
+  min_posts_required: 1
+  required_env_vars: []

@@ -1,0 +1,115 @@
+# Example: Elon Musk Tesla Sentiment Analysis
+# Filled template for Elon's posts about Tesla
+
+metadata:
+  template_version: "1.0"
+  created_date: "2025-07-31"
+  description: "Analysis of Elon Musk's Tesla-related posts and stock impact"
+
+experiment:
+  name: "Elon Tesla Sentiment vs TSLA"
+  description: "Analyze how Elon Musk's posts about Tesla correlate with Tesla stock price movements"
+  hypothesis: "Elon's bullish posts about Tesla lead to positive stock movements, while bearish posts lead to negative movements"
+  
+  data_sources:
+    social_media:
+      platform: "twitter"
+      actor_id: "q3AsRbPSo84VN5zas"
+      accounts:
+        - "elonmusk"
+      keywords:
+        - "tesla"
+        - "@tesla"
+        - "model"
+        - "cybertruck"
+        - "gigafactory"
+        - "autopilot"
+        - "fsd"
+        - "full self-driving"
+        - "battery"
+        - "production"
+        - "delivery"
+        - "factory"
+        - "manufacturing"
+      date_range:
+        start: "365_days_ago"
+        end: "now"
+      max_posts: 1000
+    
+    market_data:
+      provider: "alpaca"
+      symbols:
+        - symbol: "TSLA"
+          name: "Tesla Inc."
+      data_feed: "iex"
+      
+  sentiment_analysis:
+    llm_provider: "openai"
+    model: "gpt-3.5-turbo"
+    temperature: 0.1
+    
+    categories:
+      - name: "BULLISH"
+        description: "Positive about Tesla's future, products, or performance"
+      - name: "BEARISH"
+        description: "Negative or cautious about Tesla"
+      - name: "NEUTRAL"
+        description: "Factual, mixed, or unclear sentiment"
+  
+  analysis:
+    time_intervals: [1, 6, 12, 24]
+    
+    conditions:
+      - name: "market_hours"
+        description: "Whether posted during market hours"
+        enabled: true
+      
+      - name: "engagement_level"
+        description: "Post engagement metrics"
+        enabled: true
+        thresholds:
+          viral: 1000000
+          high: 500000
+          medium: 100000
+      
+      - name: "product_announcement"
+        description: "Whether post announces new product/feature"
+        enabled: true
+        implementation: "check_product_keywords"
+  
+  output:
+    reports:
+      - type: "markdown"
+        filename: "tesla_sentiment_analysis_report"
+        include_sections:
+          - sentiment_distribution
+          - price_impact_summary
+          - statistical_analysis
+          - top_impact_posts
+          - market_hours_analysis
+          - engagement_analysis
+          - key_findings
+          - methodology
+    
+    visualizations:
+      - type: "sentiment_overview"
+        filename: "sentiment_comparison"
+      - type: "price_timeline"
+        filename: "impact_timeline"
+      - type: "engagement_impact"
+        filename: "engagement_impact"
+    
+    data_exports:
+      - type: "csv"
+        filename: "analysis_results"
+      - type: "json"
+        filename: "raw_tweets"
+
+validation:
+  min_posts_required: 20
+  min_confidence_threshold: 0.6
+  required_env_vars:
+    - "APIFY_API_KEY"
+    - "ALPACA_API_KEY"
+    - "ALPACA_SECRET_KEY"
+    - "OPENAI_API_KEY"

@@ -1,0 +1,133 @@
+# Example: Donald Trump Tesla/Tech Sentiment Analysis
+# Filled template for Trump's posts about Tesla, EV, AI, and Elon Musk
+
+metadata:
+  template_version: "1.0"
+  created_date: "2025-07-31"
+  description: "Analysis of Trump's tech-related posts and Tesla stock impact"
+
+experiment:
+  name: "Trump Tech Sentiment vs TSLA"
+  description: "Analyze how Donald Trump's posts about Tesla, EVs, AI, and Elon Musk correlate with Tesla stock price movements"
+  hypothesis: "Trump's positive posts about Tesla/Elon lead to positive stock price movements within 24 hours"
+  
+  data_sources:
+    social_media:
+      platform: "twitter"
+      actor_id: "q3AsRbPSo84VN5zas"
+      accounts:
+        - "realDonaldTrump"
+        - "DonaldTrump"
+      keywords:
+        - "elon"
+        - "musk"
+        - "tesla"
+        - "ev"
+        - "electric vehicle"
+        - "electric car"
+        - "ai"
+        - "artificial intelligence"
+        - "robot"
+        - "robotics"
+        - "spacex"
+        - "autonomous"
+        - "self-driving"
+        - "battery"
+        - "neuralink"
+        - "starlink"
+        - "cybertruck"
+        - "gigafactory"
+        - "technology"
+        - "tech"
+      date_range:
+        start: "365_days_ago"
+        end: "now"
+      max_posts: 500
+    
+    market_data:
+      provider: "alpaca"
+      symbols:
+        - symbol: "TSLA"
+          name: "Tesla Inc."
+      data_feed: "iex"
+      
+  sentiment_analysis:
+    llm_provider: "openai"
+    model: "gpt-4-turbo-preview"
+    temperature: 0.0
+    
+    categories:
+      - name: "BULLISH"
+        description: "Positive about Tesla, Elon, or the technology"
+      - name: "BEARISH"
+        description: "Negative or critical about Tesla, Elon, or the technology"
+      - name: "NEUTRAL"
+        description: "Factual, mixed sentiment, or unclear"
+    
+    custom_prompt: |
+      Analyze the following tweet from Donald Trump about technology/Elon Musk and classify it as:
+      1. BULLISH (positive about the technology, company, or person)
+      2. BEARISH (negative or critical)
+      3. NEUTRAL (factual, mixed, or unclear sentiment)
+      
+      Also provide a confidence score (0-1) and a brief reason.
+      
+      Tweet: "{tweet_text}"
+      
+      Respond in JSON format:
+      {"sentiment": "BULLISH/BEARISH/NEUTRAL", "confidence": 0.0-1.0, "reason": "brief explanation"}
+  
+  analysis:
+    time_intervals: [1, 6, 12, 24]
+    
+    conditions:
+      - name: "market_hours"
+        description: "Whether posted during NYSE market hours (9:30 AM - 4:00 PM ET)"
+        enabled: true
+      
+      - name: "engagement_level"
+        description: "Post engagement metrics"
+        enabled: true
+        thresholds:
+          viral: 200000
+          high: 100000
+          medium: 50000
+  
+  output:
+    reports:
+      - type: "markdown"
+        filename: "trump_tech_sentiment_report"
+        include_sections:
+          - sentiment_distribution
+          - price_impact_summary
+          - statistical_analysis
+          - top_impact_posts
+          - market_hours_analysis
+          - engagement_analysis
+          - key_findings
+          - methodology
+    
+    visualizations:
+      - type: "sentiment_overview"
+        filename: "trump_sentiment_overview"
+      - type: "price_timeline"
+        filename: "trump_sentiment_timeline"
+      - type: "engagement_impact"
+        filename: "trump_engagement_impact"
+      - type: "price_distributions"
+        filename: "trump_price_distributions"
+    
+    data_exports:
+      - type: "csv"
+        filename: "trump_tech_analysis"
+      - type: "json"
+        filename: "trump_raw_tweets"
+
+validation:
+  min_posts_required: 10
+  min_confidence_threshold: 0.5
+  required_env_vars:
+    - "APIFY_API_KEY"
+    - "ALPACA_API_KEY"
+    - "ALPACA_SECRET_KEY"
+    - "OPENAI_API_KEY"
