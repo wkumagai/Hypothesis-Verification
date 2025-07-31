@@ -17,25 +17,47 @@ cp .env.example .env
 # Edit .env with your API keys
 
 # Run an example experiment
-python hypothesis_runner.py templates/examples/trump_tesla_example.yaml
+python src/core/hypothesis_runner.py templates/examples/trump_tesla_example.yaml
 ```
 
 ## 📋 Project Structure
 
 ```
 Hypothesis-Verification/
-├── templates/                      # YAML templates for experiments
-│   ├── hypothesis_template.yaml    # Base template with all options
-│   └── examples/                   # Example filled templates
-│       ├── trump_tesla_example.yaml
-│       └── elon_tesla_example.yaml
-├── results/                        # Generated analysis results
-├── hypothesis_runner.py            # Main runner for template-based analysis
-├── universal_sentiment_analyzer.py # Universal analyzer that works with any template
-├── tesla_sentiment_analysis.py     # Specific Elon Musk Tesla analysis
-├── trump_tech_sentiment_analysis.py # Specific Trump tech analysis
-└── test_hypothesis_system.py       # System verification tests
+├── src/                           # Source code
+│   ├── core/                      # Core functionality
+│   │   ├── hypothesis_runner.py  # Template-based experiment runner
+│   │   └── universal_sentiment_analyzer.py
+│   ├── analyzers/                 # Analysis implementations
+│   │   ├── tesla_sentiment_analysis.py
+│   │   ├── trump_tech_sentiment_analysis.py
+│   │   └── sentiment_classification_methodology.py
+│   └── utils/                     # Utility functions
+├── data/                          # Data storage
+│   ├── raw/                       # Raw API data
+│   └── processed/                 # Processed results
+├── results/                       # Analysis outputs
+│   ├── elon_tesla/               # Elon Musk analysis results
+│   ├── trump_tech/               # Trump analysis results
+│   └── reports/                  # Generated reports
+├── assets/                        # Static assets
+│   └── images/                   # Charts and visualizations
+├── templates/                     # Experiment templates
+│   ├── hypothesis_template.yaml  # Base template
+│   └── examples/                 # Example configurations
+├── tests/                        # Test suite
+├── scripts/                      # Utility scripts
+│   ├── organize_repo.py         # Auto-organization script
+│   └── cleanup.sh               # Cleanup script
+├── docs/                         # Documentation
+│   ├── STRUCTURE.md             # Repository organization guide
+│   └── CONTRIBUTING.md          # Contribution guidelines
+└── .github/                      # GitHub configurations
+    └── workflows/                # GitHub Actions
+        └── organize.yml          # Auto-organization workflow
 ```
+
+For detailed structure documentation, see [docs/STRUCTURE.md](docs/STRUCTURE.md).
 
 ## 🧪 Template System
 
@@ -82,7 +104,7 @@ experiment:
 
 3. Run the experiment:
    ```bash
-   python hypothesis_runner.py templates/my_experiment.yaml
+   python src/core/hypothesis_runner.py templates/my_experiment.yaml
    ```
 
 ## 📊 Analysis Types
@@ -161,14 +183,16 @@ Process multiple experiments:
 
 ```bash
 for template in templates/experiments/*.yaml; do
-    python hypothesis_runner.py "$template"
+    python src/core/hypothesis_runner.py "$template"
 done
 ```
 
 ### Programmatic Usage
 
 ```python
-from hypothesis_runner import HypothesisRunner
+import sys
+sys.path.append('src')
+from core.hypothesis_runner import HypothesisRunner
 
 runner = HypothesisRunner("path/to/template.yaml")
 results = runner.run_experiment()
@@ -214,6 +238,32 @@ Generated reports include:
 - Engagement vs impact correlations
 - Statistical summaries
 - Methodology documentation
+
+## 🗂️ Repository Maintenance
+
+### Automated Organization
+
+The repository includes automated organization features:
+
+1. **Organization Script**: Run manually to reorganize files
+   ```bash
+   python scripts/organize_repo.py
+   ```
+
+2. **Cleanup Script**: Remove temporary files and organize
+   ```bash
+   ./scripts/cleanup.sh
+   ```
+
+3. **GitHub Actions**: Automatically runs weekly and on PRs to maintain structure
+
+### Contributing
+
+See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines on:
+- File naming conventions
+- Directory structure rules
+- Adding new analyses
+- Submitting pull requests
 
 ## 🚀 Future Enhancements
 
