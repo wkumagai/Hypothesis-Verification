@@ -1,0 +1,118 @@
+name: Organize Repository
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # Run weekly on Sundays at 00:00 UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
+
+jobs:
+  organize:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyyaml
+    
+    - name: Run organization script
+      run: |
+        python scripts/organize_repo.py
+    
+    - name: Check for changes
+      id: verify-changed-files
+      run: |
+        git status --porcelain
+        if [[ -n $(git status --porcelain) ]]; then
+          echo "changed=true" >> $GITHUB_OUTPUT
+        else
+          echo "changed=false" >> $GITHUB_OUTPUT
+        fi
+    
+    - name: Commit and push changes
+      if: steps.verify-changed-files.outputs.changed == 'true'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add -A
+        git commit -m "🗂️ Auto-organize repository structure [skip ci]"
+        git push
+
+  validate-structure:
+    runs-on: ubuntu-latest
+    needs: organize
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Validate directory structure
+      run: |
+        # Check required directories exist
+        dirs=("src/core" "src/analyzers" "data/raw" "data/processed" "results" "templates" "tests" "docs")
+        
+        for dir in "${dirs[@]}"; do
+          if [ ! -d "$dir" ]; then
+            echo "❌ Missing required directory: $dir"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All required directories exist"
+    
+    - name: Check file organization
+      run: |
+        # Check no Python files in root (except setup.py)
+        py_files=$(find . -maxdepth 1 -name "*.py" ! -name "setup.py" -type f)
+        if [ -n "$py_files" ]; then
+          echo "❌ Python files found in root directory:"
+          echo "$py_files"
+          exit 1
+        fi
+        
+        # Check no CSV/JSON files in root
+        data_files=$(find . -maxdepth 1 \( -name "*.csv" -o -name "*.json" \) ! -name "package*.json" -type f)
+        if [ -n "$data_files" ]; then
+          echo "❌ Data files found in root directory:"
+          echo "$data_files"
+          exit 1
+        fi
+        
+        echo "✅ File organization validated"
+
+  update-docs:
+    runs-on: ubuntu-latest
+    needs: organize
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    
+    - name: Update file count in README
+      run: |
+        # Count files by type
+        py_count=$(find src -name "*.py" -type f | wc -l)
+        yaml_count=$(find templates -name "*.yaml" -type f | wc -l)
+        md_count=$(find . -name "*.md" -type f | wc -l)
+        
+        # Update README badge or statistics section
+        # This is a placeholder - implement actual README update logic
+        echo "Python files: $py_count"
+        echo "Template files: $yaml_count"
+        echo "Documentation files: $md_count"

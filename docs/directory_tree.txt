@@ -1,0 +1,81 @@
+```
+Hypothesis-Verification/
+├── README.md
+└── requirements.txt
+├── config/
+├── tests/
+│   ├── __init__.py
+│   └── test_hypothesis_system.py
+├── __pycache__/
+│   └── hypothesis_runner.cpython-313.pyc
+├── docs/
+│   ├── CONTRIBUTING.md
+│   └── STRUCTURE.md
+├── results/
+│   ├── elon_tesla/
+│   ├── trump_tech/
+│   ├── reports/
+│   │   ├── sentiment_classification_methodology_report.md
+│   │   ├── tesla_multi_condition_analysis_report.md
+│   │   ├── tesla_sentiment_analysis_report.md
+│   │   ├── test_file.md
+│   │   └── trump_tech_sentiment_report.md
+├── scripts/
+│   ├── __init__.py
+│   └── organize_repo.py
+├── templates/
+│   ├── hypothesis_template.yaml
+│   └── test_template.yaml
+│   ├── examples/
+│   │   ├── elon_tesla_example.yaml
+│   │   └── trump_tesla_example.yaml
+├── data/
+│   ├── processed/
+│   │   ├── analysis_results.csv
+│   │   ├── condition_contains_metrics_results.csv
+│   │   ├── condition_engagement_category_results.csv
+│   │   ├── condition_forward_looking_results.csv
+│   │   ├── condition_is_product_announcement_results.csv
+│   │   ├── condition_sentiment_results.csv
+│   │   ├── condition_time_category_results.csv
+│   │   ├── condition_topic_category_results.csv
+│   │   ├── condition_urgency_level_results.csv
+│   │   ├── multi_condition_analysis.csv
+│   │   ├── sentiment_classification_details.json
+│   │   └── trump_tech_analysis.csv
+│   ├── raw/
+│   │   ├── elon_raw_tweets.json
+│   │   └── trump_raw_tweets.json
+├── assets/
+│   ├── images/
+│   │   ├── engagement_impact.png
+│   │   ├── impact_heatmap.png
+│   │   ├── impact_timeline.png
+│   │   ├── market_hours_impact.png
+│   │   ├── price_change_boxplots.png
+│   │   ├── price_change_distributions.png
+│   │   ├── sentiment_characteristics.png
+│   │   ├── sentiment_comparison.png
+│   │   ├── sentiment_methodology_overview.png
+│   │   ├── sentiment_topic_distribution.png
+│   │   ├── special_categories.png
+│   │   ├── summary_statistics.png
+│   │   ├── trump_engagement_impact.png
+│   │   ├── trump_sentiment_overview.png
+│   │   └── trump_sentiment_timeline.png
+├── src/
+│   └── __init__.py
+│   ├── analyzers/
+│   │   ├── __init__.py
+│   │   ├── sentiment_classification_methodology.py
+│   │   ├── tesla_multi_condition_analysis.py
+│   │   ├── tesla_sentiment_analysis.py
+│   │   ├── trump_tech_sentiment_analysis.py
+│   │   └── trump_tech_sentiment_analysis_v2.py
+│   ├── core/
+│   │   ├── __init__.py
+│   │   ├── hypothesis_runner.py
+│   │   └── universal_sentiment_analyzer.py
+│   ├── utils/
+│   │   └── __init__.py
+```
