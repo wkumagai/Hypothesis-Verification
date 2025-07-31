@@ -1,3 +1,7 @@
+# Claude Code subagents (DO NOT IGNORE)
+!.claude/
+!.claude/**
+
 # Python
 __pycache__/
 *.py[cod]
