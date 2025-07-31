@@ -1,0 +1,192 @@
+# Example: Trump Tech Analysis with Full Subagent Support
+# This example shows how to use the enhanced template with subagents
+
+metadata:
+  template_version: "2.0"
+  created_date: "2025-07-31"
+  description: "Analyze Trump's posts about tech companies with comprehensive validation"
+
+experiment:
+  name: "Trump Tech Sentiment Analysis with Quality Control"
+  description: "Analyze how Trump's posts about tech companies affect their stock prices with rigorous validation"
+  hypothesis: "Trump's posts about technology companies significantly impact their stock prices, with stronger effects for negative sentiment"
+  
+  # Enable all subagents for comprehensive analysis
+  subagents:
+    - data_validator      # Validate data quality
+    - market_context      # Research confounding factors
+    - statistical_analyzer # Rigorous statistical validation
+    - report_generator    # Professional report generation
+  
+  data_sources:
+    social_media:
+      platform: "truth_social"
+      actor_id: "q3AsRbPSo84VN5zas"  # Truth Social scraper
+      accounts:
+        - "realDonaldTrump"
+      keywords:
+        - "Apple"
+        - "Google"
+        - "Microsoft"
+        - "Amazon"
+        - "Meta"
+        - "Tesla"
+        - "Elon"
+        - "Zuckerberg"
+        - "tech"
+        - "Big Tech"
+      date_range:
+        start: "180_days_ago"
+        end: "now"
+      max_posts: 500
+    
+    market_data:
+      provider: "alpaca"
+      symbols:
+        - symbol: "AAPL"
+          name: "Apple Inc."
+        - symbol: "GOOGL"
+          name: "Alphabet Inc."
+        - symbol: "MSFT"
+          name: "Microsoft Corporation"
+        - symbol: "AMZN"
+          name: "Amazon.com Inc."
+        - symbol: "META"
+          name: "Meta Platforms Inc."
+        - symbol: "TSLA"
+          name: "Tesla Inc."
+      data_feed: "iex"
+      
+  sentiment_analysis:
+    llm_provider: "openai"
+    model: "gpt-4-turbo-preview"
+    temperature: 0.0
+    
+    categories:
+      - name: "BULLISH"
+        description: "Positive sentiment, praise, endorsement, or support for the company/executive"
+      - name: "BEARISH"
+        description: "Negative sentiment, criticism, attacks, or opposition to the company/executive"
+      - name: "NEUTRAL"
+        description: "Factual statements or mentions without clear positive/negative sentiment"
+    
+    custom_prompt: |
+      You are analyzing a social media post from Donald Trump about technology companies.
+      
+      Classify the sentiment as:
+      - BULLISH: Praise, support, endorsement, positive outlook
+      - BEARISH: Criticism, attacks, negative predictions, calls for action against
+      - NEUTRAL: Factual mentions without clear sentiment
+      
+      Consider Trump's communication style where criticism is often very direct.
+      
+      Post: {text}
+      
+      Respond with: SENTIMENT: [BULLISH/BEARISH/NEUTRAL]
+      CONFIDENCE: [0-1]
+      REASONING: [Brief explanation]
+  
+  analysis:
+    time_intervals: [1, 6, 12, 24]
+    statistical_rigor: "academic"  # Triggers comprehensive statistical analysis
+    
+    conditions:
+      - name: "market_hours"
+        description: "Whether posted during market hours"
+        enabled: true
+      
+      - name: "engagement_level"
+        description: "Post engagement metrics"
+        enabled: true
+        thresholds:
+          viral: 100000
+          high: 50000
+          medium: 10000
+      
+      - name: "attack_intensity"
+        description: "Severity of negative posts"
+        enabled: true
+        implementation: |
+          # Custom code to measure attack intensity
+          strong_negative_words = ['disaster', 'terrible', 'failing', 'crooked', 'corrupt']
+          intensity = sum(1 for word in strong_negative_words if word in text.lower())
+          return 'high' if intensity >= 2 else 'medium' if intensity >= 1 else 'low'
+  
+  output:
+    reports:
+      - type: "markdown"
+        filename: "trump_tech_analysis_comprehensive"
+        style: "academic"
+        include_sections:
+          - sentiment_distribution
+          - price_impact_summary
+          - statistical_analysis
+          - top_impact_posts
+          - market_hours_analysis
+          - engagement_analysis
+          - key_findings
+          - methodology
+          - data_quality_report
+          - market_context_summary
+          - statistical_validation
+          - limitations_and_caveats
+      
+      - type: "pdf"
+        filename: "trump_tech_analysis_academic"
+        style: "academic"
+        enabled: true
+    
+    visualizations:
+      - type: "sentiment_overview"
+        filename: "trump_tech_sentiment_overview.png"
+      - type: "price_timeline"
+        filename: "trump_tech_price_timeline.png"
+      - type: "engagement_impact"
+        filename: "trump_tech_engagement_impact.png"
+      - type: "price_distributions"
+        filename: "trump_tech_price_distributions.png"
+      - type: "correlation_matrix"
+        filename: "trump_tech_correlations.png"
+      - type: "market_context_overlay"
+        filename: "trump_tech_market_context.png"
+    
+    data_exports:
+      - type: "csv"
+        filename: "trump_tech_analysis.csv"
+      - type: "json"
+        filename: "trump_tech_raw_posts.json"
+      - type: "statistical_output"
+        filename: "trump_tech_statistical_results.json"
+
+validation:
+  min_posts_required: 50
+  min_confidence_threshold: 0.7
+  data_quality_threshold: 0.9
+  required_env_vars:
+    - "APIFY_API_KEY"
+    - "ALPACA_API_KEY"
+    - "ALPACA_SECRET_KEY"
+    - "OPENAI_API_KEY"
+
+subagent_config:
+  data_validator:
+    strict_mode: true
+    check_duplicates: true
+    check_outliers: true
+    cross_reference_threshold: 0.95
+  
+  market_context:
+    include_news: true
+    include_sector_analysis: true
+    confounding_window_days: 3  # Look for events within 3 days
+  
+  statistical_analyzer:
+    confidence_level: 0.95
+    use_bootstrap: true
+    bootstrap_iterations: 10000
+    multiple_testing_correction: "bonferroni"
+  
+  report_generator:
+    include_executive_summary: true
+    max_pages: 30
+    visualization_dpi: 300

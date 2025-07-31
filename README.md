@@ -27,7 +27,9 @@ Hypothesis-Verification/
 ├── src/                           # Source code
 │   ├── core/                      # Core functionality
 │   │   ├── hypothesis_runner.py  # Template-based experiment runner
-│   │   └── universal_sentiment_analyzer.py
+│   │   ├── hypothesis_runner_enhanced.py  # Enhanced runner with subagents
+│   │   ├── universal_sentiment_analyzer.py
+│   │   └── subagent_framework.py  # Subagent orchestration system
 │   ├── analyzers/                 # Analysis implementations
 │   │   ├── tesla_sentiment_analysis.py
 │   │   ├── trump_tech_sentiment_analysis.py
@@ -44,7 +46,14 @@ Hypothesis-Verification/
 │   └── images/                   # Charts and visualizations
 ├── templates/                     # Experiment templates
 │   ├── hypothesis_template.yaml  # Base template
+│   ├── hypothesis_template_with_subagents.yaml  # Enhanced template
 │   └── examples/                 # Example configurations
+├── subagents/                     # Subagent specifications
+│   ├── data_validator.md         # Data quality validation
+│   ├── market_context.md         # Market research
+│   ├── statistical_analyzer.md   # Statistical validation
+│   ├── report_generator.md       # Report generation
+│   └── spec_researcher.md        # Spec updates
 ├── tests/                        # Test suite
 ├── scripts/                      # Utility scripts
 │   ├── organize_repo.py         # Auto-organization script
@@ -62,6 +71,26 @@ For detailed structure documentation, see [docs/STRUCTURE.md](docs/STRUCTURE.md)
 ## 🧪 Template System
 
 The template system allows you to define hypothesis verification experiments in YAML format. Templates can be filled manually or by AI systems.
+
+### 🤖 NEW: Subagent System
+
+The enhanced hypothesis runner now includes specialized AI subagents that automatically improve your analysis:
+
+- **Data Validator**: Ensures data quality before analysis
+- **Market Context**: Researches confounding market events  
+- **Statistical Analyzer**: Performs rigorous statistical validation
+- **Report Generator**: Creates professional, standardized reports
+- **Spec Researcher**: Keeps dependencies and APIs up-to-date
+
+#### Using Subagents
+
+```bash
+# Run with full subagent support (default)
+python src/core/hypothesis_runner_enhanced.py templates/example_with_subagents.yaml
+
+# Run without subagents for comparison
+python src/core/hypothesis_runner_enhanced.py templates/example.yaml --no-subagents
+```
 
 ### Basic Template Structure
 
@@ -187,6 +216,34 @@ for template in templates/experiments/*.yaml; do
 done
 ```
 
+### 🤖 Subagent Configuration
+
+Configure which subagents to use in your template:
+
+```yaml
+experiment:
+  # Enable specific subagents
+  subagents:
+    - data_validator      # Quality assurance
+    - market_context      # External factors
+    - statistical_analyzer # Rigorous validation
+    - report_generator    # Professional outputs
+  
+  # Configure subagent behavior
+  analysis:
+    statistical_rigor: "academic"  # basic, standard, academic
+
+# Subagent-specific settings
+subagent_config:
+  data_validator:
+    strict_mode: true
+    check_duplicates: true
+  
+  statistical_analyzer:
+    confidence_level: 0.95
+    bootstrap_iterations: 10000
+```
+
 ### Programmatic Usage
 
 ```python
@@ -267,12 +324,15 @@ See [docs/CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines on:
 
 ## 🚀 Future Enhancements
 
+- [x] Specialized subagents for quality control
 - [ ] Support for Reddit, Truth Social
 - [ ] Real-time monitoring mode
 - [ ] Machine learning predictions
 - [ ] Multi-symbol portfolio analysis
-- [ ] Automated report generation
+- [x] Automated report generation
 - [ ] Web dashboard interface
+- [ ] Cross-agent memory sharing
+- [ ] Automated experiment optimization
 
 ## 📄 License
 

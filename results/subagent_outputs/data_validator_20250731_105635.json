@@ -1,0 +1,31 @@
+{
+  "validation_status": "warning",
+  "timestamp": "2025-07-31T10:56:35.851878",
+  "checks": {
+    "completeness": {
+      "status": "passed",
+      "missing_records": 0,
+      "coverage": "100.0%"
+    },
+    "quality": {
+      "status": "warning",
+      "issues": [
+        "1 duplicate posts detected"
+      ],
+      "outliers": 0
+    },
+    "api_data": {
+      "status": "passed",
+      "freshness": "real-time",
+      "schema_valid": true
+    },
+    "cross_reference": {
+      "status": "passed",
+      "matched_records": 3,
+      "unmatched": 0
+    }
+  },
+  "recommendations": [
+    "1 duplicate posts detected"
+  ]
+}
